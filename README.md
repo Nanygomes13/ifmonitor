@@ -29,8 +29,8 @@ Assim, tornando o processo de monitoria mais organizado, reduzindo problemas rel
 
 O projeto foi desenvolvido aplicando conceitos estudados na disciplina de Estrutura de dados, dentre eles:
 
-    - **Filas:** utilizadas para gerenciar a fila de espera dos alunos;
-    - **Pilhas:** utilizadas para registrar o histórico de ações.
+    - Filas: utilizadas para gerenciar a fila de espera dos alunos;
+    - Pilhas: utilizadas para registrar o histórico de ações.
 
 ## Tecnologias Utilizadas
 
