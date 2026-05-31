@@ -1,282 +1,175 @@
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "fila.h"
+#include "pilha.h"
+#include "utils.h"
+#include "disciplinas.h"
+#include "monitores.h"
+#include "horarios.h"
 
-struct curso{
-    int id;
-    char nome[50];
-};
-
-typedef struct curso Curso;
-
-struct disciplina{
-    int id;
-    char nome[50];
-    int id_curso;
-};
-
-typedef struct disciplina Disciplina;
-
-struct monitor{
-    int id;
-    char nome[50];
-    int id_disciplina;
-    char horario[20];
-
-    struct monitor *prox;
-};
-
-typedef struct monitor Monitor;
-
-struct aluno{
-    int matricula;
-    char nome[50];
-    int id_curso;
-
-    struct aluno *prox;
-};
-
-typedef struct aluno Aluno;
-
-struct nofila{
-    char nome[50];
-
-    struct nofila *ant;
-    struct nofila *prox;
-};
-
-typedef struct nofila noFila;
-
-struct fila{
-    noFila *inicio;
-    noFila *fim;
-};
-
-typedef struct fila Fila;
-
-struct nopilha{
-    char nomeAluno[50];
-
-    struct nopilha *prox;
-};
-
-typedef struct nopilha noPilha;
-
-struct pilha{
-    noPilha *topo;
-};
-
-typedef struct pilha Pilha;
-
-void inicializarFila(Fila *f){
-    f->inicio = NULL;
-    f->fim = NULL;
-}
-
-void enfileirar(Fila *f, char nome[50]){
-
-    noFila *novo;
-    
-    novo = (noFila*) malloc(sizeof(noFila));
-
-    if(novo == NULL){
-        printf("Erro ao alocar memória.\n");
-        return;
-    }
-
-    strcpy(novo->nome, nome);
-    
-    novo->ant = NULL;
-    novo->prox = NULL;
-
-    if(f->fim == NULL){
-        f->inicio = novo;
-        f->fim = novo;
-
-    } else {
-        novo->ant = f->fim;
-        f->fim->prox = novo;
-        f->fim = novo;
-
-    }
-
-    printf("%s entrou na fila.\n", nome);
-}
-
-void desenfileirar(Fila *f){
-
-    if(f->inicio == NULL){
-        printf("A fila está vazia.\n");
-        return;
-    }
-
-    noFila *temp;
-    
-    temp = f->inicio;
-
-    printf("%s foi chamado.\n", temp->nome);
-
-    f->inicio = f->inicio->prox;
-
-    if(f->inicio != NULL){
-        f->inicio->ant = NULL;
-    } else {
-        f->fim = NULL;
-    }
-
-    free(temp);
-}
-
-void mostrarFila(Fila *f){
-    if(f->inicio == NULL){
-        printf("Fila vazia.\n");
-        return;
-    }
-
-    noFila *aux;
-    
-    aux = f->inicio;
-
-    printf("Fila de Espera: ");
-
-    while(aux != NULL){
-        printf("%s ", aux->nome);
-        aux = aux->prox;
-    }
-    //printf("\n");
-}
-
-void inicializarPilha(Pilha *p){
-    p->topo = NULL;
-}
-
-void push(Pilha *p, char nomeAluno[50]){
-
-    noPilha *novo;
-    
-    novo = (noPilha*) malloc(sizeof(noPilha));
-
-    if(novo == NULL){
-        printf("Erro de memória.\n");
-        return;
-    }
-
-    strcpy(novo->nomeAluno, nomeAluno);
-    
-    novo->prox = p->topo;
-    p->topo = novo;
-
-    printf("%s entrou na pilha.\n", nomeAluno);
-}
-
-void pop(Pilha *p){
-
-    if(p->topo == NULL){
-        printf("Historico vazio.\n");
-        return;
-    }
-
-    noPilha *temp;
-    
-    temp = p->topo;
-
-    printf("%s foi chamado.\n", temp->nomeAluno);
-
-    p->topo = p->topo->prox;
-
-    free(temp);
-}
-
-void mostrarhistorico(Pilha *p){
-
-    if(p->topo == NULL){
-        printf("Historico vazio.\n");
-        return;
-    }
-
-    noPilha *aux;
-    
-    aux = p->topo;
-
-    printf("Historico de Atendimentos: ");
-
-    while(aux != NULL){
-
-        printf("%s ", aux->nomeAluno);
-        aux = aux->prox;
-    }
-
-    //printf("\n");
-}
-
-int main(){
-
-    Fila fila;
+int main() {
     Pilha historico;
 
     int opcao;
+    char nome[100];
+    char nomeAluno[100];
+    int id_disciplina, id_monitor, dia, turno;
 
-    char nome[50];
-    char nomeAluno[50];
-
-    inicializarFila(&fila);
     inicializarPilha(&historico);
+    inicializarDisciplinas();
+    inicializarMonitores();
+    inicializarHorarios();
 
-    do{
-        printf("\nMenu Monitoria:\n");
-        printf("1. Adicionar aluno\n");
-        printf("2. Chamar proximo aluno\n");
-        printf("3. Mostrar fila de espera\n");
-        printf("4. Mostrar historico\n");
-        printf("5. Desfazer ultima acao\n");
-        printf("0. Sair\n");
-
+    do {
+        printf("\n=========================================\n");
+        printf("      SISTEMA DE MONITORIAS (IFAL)       \n");
+        printf("=========================================\n");
+        printf(" 1. Cadastrar Disciplina\n");
+        printf(" 2. Cadastrar Monitor e Horario\n");
+        printf(" 3. Ver Grade de Horarios e Monitores\n");
+        printf(" 4. Entrar na Fila de Espera (Aluno)\n");
+        printf(" 5. Atender Proximo Aluno\n");
+        printf(" 6. Ver Filas e Historico\n");
+        printf(" 7. Desfazer Ultima Acao (Pilha)\n");
+        printf(" 0. Sair\n");
+        printf("=========================================\n");
         printf("Escolha uma opcao: ");
+        
         scanf("%d", &opcao);
+        limparBufferEntrada();
 
-        getchar();
-
-        switch(opcao){
+        switch (opcao) {
             case 1:
-                printf("Digite o nome do aluno: ");
-                scanf("%s", nome);
-
-                enfileirar(&fila, nome);
-
-                push(&historico, nome);
-                break;
-
-            case 2:
-
-                if(fila.inicio != NULL){
-                    sprintf(nomeAluno, "%s foi chamado", fila.inicio->nome);
+                printf("Digite o ID da disciplina: ");
+                scanf("%d", &id_disciplina);
+                limparBufferEntrada();
+                printf("Digite o nome da disciplina: ");
+                lerStringSegura(nome, sizeof(nome));
+                
+                if (adicionarDisciplina(nome, id_disciplina)) {
+                    sprintf(nomeAluno, "Cadastrou Disciplina %d", id_disciplina);
                     push(&historico, nomeAluno);
                 }
-
-                desenfileirar(&fila);
                 break;
-
+                
+            case 2:
+                printf("\n--- Disciplinas Disponiveis ---\n");
+                listarDisciplinas();
+                printf("-------------------------------\n\n");
+                
+                printf("Digite o ID do monitor: ");
+                scanf("%d", &id_monitor);
+                limparBufferEntrada();
+                printf("Digite o nome do monitor: ");
+                lerStringSegura(nome, sizeof(nome));
+                printf("Digite o ID da disciplina: ");
+                scanf("%d", &id_disciplina);
+                limparBufferEntrada();
+                
+                if (buscarDisciplinaPorId(id_disciplina) == NULL) {
+                    printf("Erro: Disciplina nao existe.\n");
+                } else {
+                    if (adicionarMonitor(nome, id_monitor, id_disciplina)) {
+                        printf("Digite o dia para alocar (0=Seg, 1=Ter, 2=Qua, 3=Qui, 4=Sex): ");
+                        scanf("%d", &dia);
+                        printf("Digite o turno (0=Manha, 1=Tarde, 2=Noite): ");
+                        scanf("%d", &turno);
+                        limparBufferEntrada();
+                        
+                        if (alocarHorario(dia, turno, id_monitor)) {
+                            sprintf(nomeAluno, "Mon.%d alocado", id_monitor);
+                            push(&historico, nomeAluno);
+                        } else {
+                            sprintf(nomeAluno, "Cadastrou Mon.%d (Sem Horario)", id_monitor);
+                            push(&historico, nomeAluno);
+                        }
+                    }
+                }
+                break;
+                
             case 3:
-                mostrarFila(&fila);
+                listarDisciplinas();
+                listarMonitores();
+                mostrarHorarios();
+                break;
+                
+            case 4:
+                printf("\n--- Monitores Disponiveis ---\n");
+                listarMonitores();
+                printf("-----------------------------\n\n");
+                
+                printf("Digite o ID do monitor que deseja atendimento: ");
+                scanf("%d", &id_monitor);
+                limparBufferEntrada();
+                
+                Monitor *m_entrar = buscarMonitorPorId(id_monitor);
+                if (m_entrar == NULL) {
+                    printf("Monitor nao encontrado.\n");
+                } else {
+                    printf("Digite o nome do aluno: ");
+                    lerStringSegura(nome, sizeof(nome));
+                    enfileirar(&(m_entrar->filaEspera), nome);
+                    sprintf(nomeAluno, "Aluno %s na fila do Mon.%d", nome, id_monitor);
+                    push(&historico, nomeAluno);
+                }
                 break;
 
-            case 4:
+            case 5:
+                printf("Digite o ID do monitor que vai atender: ");
+                scanf("%d", &id_monitor);
+                limparBufferEntrada();
+                
+                Monitor *m_atender = buscarMonitorPorId(id_monitor);
+                if (m_atender == NULL) {
+                    printf("Monitor nao encontrado.\n");
+                } else {
+                    if (m_atender->filaEspera.inicio != NULL) {
+                        sprintf(nomeAluno, "Aluno %s atendido pelo Mon.%d", m_atender->filaEspera.inicio->nome, id_monitor);
+                        push(&historico, nomeAluno);
+                        desenfileirar(&(m_atender->filaEspera));
+                    } else {
+                        printf("A fila deste monitor esta vazia.\n");
+                    }
+                }
+                break;
+
+            case 6:
+                printf("\n--- Filas de Espera por Monitor ---\n");
+                Monitor *aux = inicioMonitores;
+                int temFila = 0;
+                while (aux != NULL) {
+                    printf("\n> Fila do Monitor %s:\n", aux->nome);
+                    mostrarFila(&(aux->filaEspera));
+                    aux = aux->prox;
+                    temFila = 1;
+                }
+                if (!temFila) printf("Nenhum monitor cadastrado ainda.\n");
+                
                 mostrarhistorico(&historico);
                 break;
-            
-            case 5:
+                
+            case 7:
                 pop(&historico);
                 break;
 
             case 0:
-                printf("Saindo...\n");
+                printf("Saindo do sistema...\n");
                 break;
 
             default:
                 printf("Opcao invalida.\n");
         }
 
-    } while(opcao != 0);
+        if (opcao != 0) {
+            printf("\n[Pressione ENTER para voltar ao menu...]");
+            getchar();
+        }
+
+    } while (opcao != 0);
+
+    liberarPilha(&historico);
+    liberarMonitores();
 
     return 0;
 }

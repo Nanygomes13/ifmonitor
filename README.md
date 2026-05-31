@@ -10,35 +10,37 @@
 
 Este projeto foi solicitado pela Professora Cledja Karina Rolim da Silva, da disciplina de estrutura de dados, para fins de aprendizagem e como um dos requisitos avaliativos do 3° período do curso de Sistemas de Informação do Instituto Federal de Educação, Ciência e Tecnologia de Alagoas - IFAL Campus Arapiraca.
 
-O sistema tem como objetivo auxiliar na organização das monitorias acadêmicas, permitindo o gerenciamento de cursos, disciplinas, monitores, horários de atendimento e reservas realizadas pelos alunos.
+O sistema tem como objetivo auxiliar na organização das monitorias acadêmicas, permitindo o gerenciamento de disciplinas, monitores, horários de atendimento e a fila de alunos.
 
 Assim, tornando o processo de monitoria mais organizado, reduzindo problemas relacionados à comunicação, controle de horários e gerenciamento de atendimentos.
 
 ## Funcionalidades
 
-    - Cadastro de cursos;
     - Cadastro de disciplinas;
-    - Cadastro de monitores;
-    - Consulta;
-    - Visualização de horários disponíveis;
-    - Reserva de horário;
-    - Fila de espera;
-    - Histórico de ações.
+    - Cadastro de monitores com alocação de horário;
+    - Visualização da grade de horários e monitores;
+    - Entrada na fila de espera por monitor;
+    - Atendimento de alunos (Próximo da fila);
+    - Histórico de ações (Com opção de desfazer).
 
 ## Estrutura de Dados Utilizadas
 
 O projeto foi desenvolvido aplicando conceitos estudados na disciplina de Estrutura de dados, dentre eles:
 
-    - Filas: utilizadas para gerenciar a fila de espera dos alunos;
-    - Pilhas: utilizadas para registrar o histórico de ações.
+    - Vetores: utilizados para armazenar as disciplinas;
+    - Matrizes: utilizadas para compor a grade de horários (Dias x Turnos);
+    - Listas Encadeadas: utilizadas para gerenciar os monitores cadastrados;
+    - Filas (Duplamente Encadeadas): utilizadas para gerenciar a fila de espera de cada monitor;
+    - Pilhas (Simplesmente Encadeadas): utilizadas para registrar o histórico de ações.
 
 ## Tecnologias Utilizadas
 
     - Linguagem C;
+    - Vetores e Matrizes;
     - Listas encadeadas;
     - Filas;
     - Pilhas.
 
 ## Objetivo Acadêmico
 
-O principal objetivo do projeto é aplicar, de forma prática, os conceitos de estruturas de dados estudados em sala de aula, utilizando filas e pilhas para solucionar uma situação relacionada ao ambiente acadêmico.
+O principal objetivo do projeto é aplicar, de forma prática, os conceitos de estruturas de dados estudados em sala de aula para solucionar uma situação relacionada ao ambiente acadêmico.
