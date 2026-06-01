@@ -10,35 +10,35 @@
 
 Este projeto foi solicitado pela Professora Cledja Karina Rolim da Silva, da disciplina de estrutura de dados, para fins de aprendizagem e como um dos requisitos avaliativos do 3° período do curso de Sistemas de Informação do Instituto Federal de Educação, Ciência e Tecnologia de Alagoas - IFAL Campus Arapiraca.
 
-O sistema tem como objetivo auxiliar na organização das monitorias acadêmicas, permitindo o gerenciamento de cursos, disciplinas, monitores, horários de atendimento e reservas realizadas pelos alunos.
+O sistema tem como objetivo auxiliar na organização das monitorias acadêmicas, permitindo o gerenciamento de cursos, disciplinas, monitores e a fila de alunos para atendimento.
 
 Assim, tornando o processo de monitoria mais organizado, reduzindo problemas relacionados à comunicação, controle de horários e gerenciamento de atendimentos.
 
 ## Funcionalidades
 
-    - Cadastro de cursos;
-    - Cadastro de disciplinas;
-    - Cadastro de monitores;
-    - Consulta;
-    - Visualização de horários disponíveis;
-    - Reserva de horário;
-    - Fila de espera;
-    - Histórico de ações.
+    - Cadastro e listagem de Cursos;
+    - Cadastro e listagem de Disciplinas;
+    - Cadastro e listagem de Monitores;
+    - Remoção de Cursos, Disciplinas e Monitores (com proteção de vínculo);
+    - Entrada na fila de espera para atendimento;
+    - Atendimento de alunos (Chamar Próximo);
+    - Histórico de ações (Com opção de desfazer).
 
 ## Estrutura de Dados Utilizadas
 
-O projeto foi desenvolvido aplicando conceitos estudados na disciplina de Estrutura de dados, dentre eles:
+O projeto foi desenvolvido aplicando os conceitos estudados na disciplina de Estrutura de Dados, dentre eles:
 
-    - Filas: utilizadas para gerenciar a fila de espera dos alunos;
-    - Pilhas: utilizadas para registrar o histórico de ações.
+    - Listas Encadeadas (Simples): utilizadas para armazenar e gerenciar dinamicamente os Cursos, Disciplinas e Monitores;
+    - Filas (Duplamente Encadeadas): utilizadas para gerenciar a fila de espera dos alunos, respeitando a ordem de chegada (FIFO);
+    - Pilhas (Simplesmente Encadeadas): utilizadas para registrar o histórico de ações, permitindo desfazer o último evento (LIFO).
 
 ## Tecnologias Utilizadas
 
     - Linguagem C;
     - Listas encadeadas;
-    - Filas;
+    - Filas Duplamente Encadeadas;
     - Pilhas.
 
 ## Objetivo Acadêmico
 
-O principal objetivo do projeto é aplicar, de forma prática, os conceitos de estruturas de dados estudados em sala de aula, utilizando filas e pilhas para solucionar uma situação relacionada ao ambiente acadêmico.
+O principal objetivo do projeto é aplicar, de forma prática, os conceitos de estruturas de dados estudados em sala de aula para solucionar uma situação relacionada ao ambiente acadêmico.
