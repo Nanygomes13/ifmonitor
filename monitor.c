@@ -3,6 +3,7 @@
 #include <string.h>
 #include "monitor.h"
 #include "disciplina.h"
+#include "fila.h"
 
 Monitor* buscarMonitorPorId(Monitor *topo, int id) {
     Monitor *aux = topo;
@@ -71,6 +72,7 @@ void cadastrarMonitor(Monitor **topo, Disciplina *listaDisciplinas) {
     strcpy(novo->nome, nome);
     novo->id_disciplina = id_disciplina;
     strcpy(novo->horario, horario);
+    inicializarFila(&novo->fila_espera);
     novo->prox = *topo;
     *topo = novo;
 
@@ -112,6 +114,7 @@ void removerMonitor(Monitor **topo, int id) {
         anterior->prox = atual->prox;
     }
 
+    liberarFila(&atual->fila_espera);
     printf("Monitor '%s' (ID: %d) removido com sucesso.\n", atual->nome, atual->id);
     free(atual);
 }
@@ -121,6 +124,7 @@ void liberarMonitores(Monitor *topo) {
     while(topo != NULL) {
         aux = topo;
         topo = topo->prox;
+        liberarFila(&aux->fila_espera);
         free(aux);
     }
 }
