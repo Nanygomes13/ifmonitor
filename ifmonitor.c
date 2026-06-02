@@ -116,9 +116,10 @@ void menuAdministrador(Curso **listaCursos, Disciplina **listaDisciplinas, Monit
     } while(opcao != 0);
 }
 
-void menuAluno(Fila *fila, Pilha *historico, Monitor *listaMonitores, Disciplina *listaDisciplinas) {
+void menuAluno(Pilha *historico, Monitor *listaMonitores, Disciplina *listaDisciplinas) {
     int opcao;
     char nome[50];
+    int idMonitor;
 
     do {
         printf("\n=== MENU ALUNO ===\n");
@@ -140,12 +141,35 @@ void menuAluno(Fila *fila, Pilha *historico, Monitor *listaMonitores, Disciplina
                 fgets(nome, sizeof(nome), stdin);
                 nome[strcspn(nome, "\n")] = '\0';
                 
-                enfileirar(fila, nome);
-                push(historico, nome);
+                printf("Digite o ID do monitor desejado: ");
+                if (scanf("%d", &idMonitor) == 1) {
+                    getchar();
+                    Monitor *m = buscarMonitorPorId(listaMonitores, idMonitor);
+                    if (m) {
+                        enfileirar(&m->fila_espera, nome);
+                    } else {
+                        printf("Erro: Monitor com ID %d nao existe.\n", idMonitor);
+                    }
+                } else {
+                    getchar();
+                    printf("ID invalido.\n");
+                }
                 break;
 
             case 2:
-                mostrarFila(fila);
+                printf("Digite o ID do monitor: ");
+                if (scanf("%d", &idMonitor) == 1) {
+                    getchar();
+                    Monitor *m = buscarMonitorPorId(listaMonitores, idMonitor);
+                    if (m) {
+                        mostrarFila(&m->fila_espera);
+                    } else {
+                        printf("Erro: Monitor com ID %d nao existe.\n", idMonitor);
+                    }
+                } else {
+                    getchar();
+                    printf("ID invalido.\n");
+                }
                 printf("\n");
                 break;
 
@@ -163,9 +187,24 @@ void menuAluno(Fila *fila, Pilha *historico, Monitor *listaMonitores, Disciplina
     } while(opcao != 0);
 }
 
-void menuMonitor(Fila *fila, Pilha *historico) {
+void menuMonitor(Monitor *listaMonitores, Pilha *historico) {
     int opcao;
     char nomeAluno[50];
+    int idMonitor;
+
+    printf("\nDigite seu ID de Monitor: ");
+    if (scanf("%d", &idMonitor) != 1) {
+        getchar();
+        printf("ID invalido.\n");
+        return;
+    }
+    getchar();
+
+    Monitor *m = buscarMonitorPorId(listaMonitores, idMonitor);
+    if (!m) {
+        printf("Erro: Monitor com ID %d nao existe.\n", idMonitor);
+        return;
+    }
 
     do {
         printf("\n=== MENU MONITOR ===\n");
@@ -184,15 +223,15 @@ void menuMonitor(Fila *fila, Pilha *historico) {
 
         switch(opcao) {
             case 1:
-                if(fila->inicio != NULL){
-                    sprintf(nomeAluno, "%s foi chamado", fila->inicio->nome);
+                if(m->fila_espera.inicio != NULL){
+                    sprintf(nomeAluno, "%s foi chamado", m->fila_espera.inicio->nome);
                     push(historico, nomeAluno);
                 }
-                desenfileirar(fila);
+                desenfileirar(&m->fila_espera);
                 break;
 
             case 2:
-                mostrarFila(fila);
+                mostrarFila(&m->fila_espera);
                 printf("\n");
                 break;
 
@@ -216,13 +255,11 @@ void menuMonitor(Fila *fila, Pilha *historico) {
 }
 
 int main(){
-    Fila fila;
     Pilha historico;
     Curso *listaCursos = NULL;
     Disciplina *listaDisciplinas = NULL;
     Monitor *listaMonitores = NULL;
 
-    inicializarFila(&fila);
     inicializarPilha(&historico);
 
     int opcao;
@@ -244,11 +281,11 @@ int main(){
 
         switch(opcao){
             case 1:
-                menuAluno(&fila, &historico, listaMonitores, listaDisciplinas);
+                menuAluno(&historico, listaMonitores, listaDisciplinas);
                 break;
 
             case 2:
-                menuMonitor(&fila, &historico);
+                menuMonitor(listaMonitores, &historico);
                 break;
 
             case 3:
@@ -260,7 +297,6 @@ int main(){
                 liberarCursos(listaCursos);
                 liberarDisciplinas(listaDisciplinas);
                 liberarMonitores(listaMonitores);
-                liberarFila(&fila);
                 liberarPilha(&historico);
                 printf("Saindo...\n");
                 break;

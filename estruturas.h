@@ -14,21 +14,6 @@ typedef struct disciplina {
     struct disciplina *prox;
 } Disciplina;
 
-typedef struct monitor {
-    int id;
-    char nome[50];
-    int id_disciplina;
-    char horario[20];
-    struct monitor *prox;
-} Monitor;
-
-typedef struct aluno {
-    int matricula;
-    char nome[50];
-    int id_curso;
-    struct aluno *prox;
-} Aluno;
-
 typedef struct nofila {
     char nome[50];
     struct nofila *ant;
@@ -39,6 +24,24 @@ typedef struct fila {
     noFila *inicio;
     noFila *fim;
 } Fila;
+
+typedef struct monitor {
+    int id;
+    char nome[50];
+    int id_disciplina;
+    char horario[20];
+    Fila fila_espera;
+    struct monitor *prox;
+} Monitor;
+
+typedef struct aluno {
+    int matricula;
+    char nome[50];
+    int id_curso;
+    struct aluno *prox;
+} Aluno;
+
+
 
 typedef struct nopilha {
     char nomeAluno[50];
